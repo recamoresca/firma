@@ -256,38 +256,40 @@ let pollTimer = null;
 
 // ── DOCUMENTS TEXT ──────────────────────────────────
 const CONTRATTO = `
-<h3>Art. 1 — Oggetto del contratto</h3>
-<p>Il presente contratto regola il soggiorno presso Relais Casa Moresca, sito in Via Didone 9, Porto Badino (LT), di seguito denominata "Struttura".</p>
-<h3>Art. 2 — Regolamento interno</h3>
-<p>L'ospite si impegna a rispettare il regolamento interno della Struttura, disponibile all'ingresso e sul sito bnbcasamoresca.com. In particolare:</p>
-<p>• Orario di silenzio: dalle ore 23:00 alle ore 08:00.<br>
-• È vietato introdurre nella Struttura animali domestici non preventivamente dichiarati.<br>
-• È vietato fumare all'interno degli ambienti chiusi.<br>
-• L'accesso alla piscina è consentito negli orari indicati.</p>
-<h3>Art. 3 — Responsabilità</h3>
-<p>L'ospite è responsabile di eventuali danni arrecati alla Struttura, agli arredi e alle attrezzature durante il proprio soggiorno. Eventuali danni saranno addebitati al momento del check-out sulla base di un preventivo.</p>
-<h3>Art. 4 — Check-out</h3>
-<p>Il check-out deve avvenire entro le ore 10:00 del giorno di partenza, salvo diversi accordi scritti con la direzione. Oltre tale orario potrà essere addebitato un supplemento.</p>
-<h3>Art. 5 — Accettazione</h3>
-<p>Firmando il presente contratto, l'ospite dichiara di aver letto, compreso e accettato integralmente tutte le condizioni sopra riportate.</p>
+<h3>Contratto di Locazione Turistica / Tourist Lease Contract</h3>
+<p>Il gestore concede in locazione all'ospite, per il solo uso turistico, l'unità immobiliare denominata <strong>"Relais Casa Moresca"</strong>, sita in Terracina, Porto Badino, via Didone n.9, composta da 3 vani, cucina e servizi, completamente ammobiliata.</p>
+<p><em>The manager leases to the guest, for tourist use only, the real estate unit called "Relais Casa Moresca", via Didone n.9, Porto Badino, consisting of 3 rooms, kitchen and bathroom, fully furnished.</em></p>
+<h3>1) Check-in / Check-out</h3>
+<p>La struttura può essere occupata dalle ore <strong>15:00</strong> del giorno di arrivo e deve essere lasciata entro le ore <strong>11:00</strong> del giorno di partenza.</p>
+<h3>2) Servizi inclusi</h3>
+<p>Tutti i servizi di base sono inclusi nel prezzo: acqua, luce, gas, aria condizionata, internet, prima pulizia, servizio spiaggia con ombrellone e lettini.</p>
+<h3>3) Obblighi e divieti</h3>
+<p>• È vietata qualunque attività che possa arrecare disturbo agli ospiti e al vicinato.<br>
+• Non è permesso fumare all'interno della Struttura.<br>
+• È vietato introdurre animali all'interno della struttura.<br>
+• È severamente vietato parcheggiare l'auto nel giardino.<br>
+• È vietato apportare modifiche agli arredi e agli impianti.</p>
+<h3>4) Responsabilità</h3>
+<p>La Direzione non risponde dell'ammanco di oggetti e/o valori degli ospiti. Eventuali anomalie devono essere immediatamente segnalate alla proprietà.</p>
+<h3>5) Accettazione</h3>
+<p>Con la firma apposta sul presente contratto, l'Ospite conferma di aver letto, compreso e di accettare integralmente il regolamento della Struttura. Per ogni controversia il Foro competente è quello di Napoli (NA).</p>
 `;
 
 const PRIVACY = `
-<h3>Informativa ai sensi del GDPR 2016/679</h3>
-<p>Ai sensi e per gli effetti del Regolamento UE 2016/679 (GDPR), Relais Casa Moresca, con sede in Via Didone 9, Porto Badino (LT), in qualità di Titolare del trattamento, La informa sul trattamento dei Suoi dati personali.</p>
-<h3>Dati raccolti</h3>
-<p>I dati personali raccolti durante il check-in (nome, cognome, data e luogo di nascita, nazionalità, numero e scadenza del documento di identità) sono acquisiti per le seguenti finalità:</p>
-<p>• Adempimento degli obblighi di legge (comunicazione alla Questura tramite il portale Alloggiati Web del Ministero dell'Interno).<br>
-• Gestione amministrativa del soggiorno.<br>
-• Comunicazioni relative al soggiorno in corso.</p>
-<h3>Base giuridica</h3>
-<p>Il trattamento è necessario per l'adempimento di obblighi legali (art. 6, par. 1, lett. c GDPR) e per l'esecuzione di un contratto di cui l'interessato è parte (art. 6, par. 1, lett. b GDPR).</p>
-<h3>Conservazione</h3>
-<p>I dati saranno conservati per il tempo strettamente necessario all'adempimento degli obblighi di legge e comunque non oltre 5 anni dalla fine del soggiorno.</p>
-<h3>Diritti dell'interessato</h3>
-<p>L'interessato ha il diritto di accedere ai propri dati, richiederne la rettifica, la cancellazione, la limitazione del trattamento o opporsi allo stesso, rivolgendosi a info@bnbcasamoresca.com.</p>
-<h3>Consenso</h3>
-<p>Firmando la presente informativa, l'ospite dichiara di aver preso visione dell'informativa sul trattamento dei dati personali e di autorizzarne il trattamento per le finalità sopra indicate.</p>
+<h3>Informativa Privacy / Privacy Policy</h3>
+<p>Ai sensi del Regolamento UE 679/2016 (GDPR), <strong>Relais Casa Moresca</strong>, Via Didone 9, Porto Badino (LT), in qualità di Titolare del trattamento, La informa sul trattamento dei Suoi dati personali.</p>
+<p><em>In compliance with GDPR UE 679/2016, Relais Casa Moresca informs you about the processing of your personal data.</em></p>
+<h3>Finalità del trattamento / Purpose</h3>
+<p>I dati forniti verranno trattati per: espletare i servizi di prenotazione turistica, adempiere agli obblighi di legge (comunicazione alla Questura), gestione amministrativa del soggiorno.</p>
+<p><em>Data will be used for: tourist booking services, legal obligations (police registration), administrative management of stay.</em></p>
+<h3>Titolare / Data Controller</h3>
+<p><strong>Relais Casa Moresca</strong> — Responsabile: Presta Pierpaolo<br>Email: info@bnbcasamoresca.com</p>
+<h3>Diritti dell'interessato / Your Rights</h3>
+<p>In ogni momento potrà esercitare i diritti di accesso, rettifica, cancellazione e opposizione al trattamento dei dati, contattando info@bnbcasamoresca.com.</p>
+<p><em>You may exercise your rights of access, rectification, cancellation and opposition by contacting info@bnbcasamoresca.com.</em></p>
+<h3>Consenso / Consent</h3>
+<p>Firmando la presente informativa, l'ospite dichiara di aver preso visione e di autorizzare il trattamento dei dati personali per le finalità indicate.</p>
+<p><em>By signing, the guest confirms having read and authorizes the processing of personal data for the purposes indicated.</em></p>
 `;
 
 // ── SCREENS ─────────────────────────────────────────
@@ -449,46 +451,81 @@ function generatePDF(docType, sigData){
   return doc.output('datauristring').split(',')[1];
 }
 
-const CONTRATTO_TEXT = `Art. 1 — Oggetto del contratto
-Il presente contratto regola il soggiorno presso Relais Casa Moresca, sito in Via Didone 9, Porto Badino (LT).
+const CONTRATTO_TEXT = `CONTRATTO DI LOCAZIONE TURISTICA
+TOURIST LEASE CONTRACT
 
-Art. 2 — Regolamento interno
-L'ospite si impegna a rispettare il regolamento interno della Struttura. In particolare:
-• Orario di silenzio: dalle ore 23:00 alle ore 08:00.
-• E' vietato introdurre animali domestici non preventivamente dichiarati.
-• E' vietato fumare all'interno degli ambienti chiusi.
-• L'accesso alla piscina e' consentito negli orari indicati.
+Il gestore concede in locazione all'ospite, per il solo uso turistico, l'unita' immobiliare denominata "Relais Casa Moresca", sita in Terracina, localita' Porto Badino, via Didone n.9, composta da 3 vani, oltre a cucina e servizi, completamente ammobiliata.
 
-Art. 3 — Responsabilita'
-L'ospite e' responsabile di eventuali danni arrecati alla Struttura, agli arredi e alle attrezzature durante il proprio soggiorno. Eventuali danni saranno addebitati al momento del check-out.
+The manager leases to the guest, for tourist use only, the real estate unit called "Relais Casa Moresca", located in Terracina, Porto Badino, via Didone n.9, consisting of 3 rooms, kitchen and bathroom, fully furnished.
 
-Art. 4 — Check-out
-Il check-out deve avvenire entro le ore 10:00 del giorno di partenza, salvo diversi accordi scritti con la direzione.
+1) CHECK-IN / CHECK-OUT
+1.1 La struttura puo' essere occupata dalle ore 15.00 del giorno di arrivo e deve essere lasciata entro le ore 11.00 del giorno di partenza.
+The structure can be occupied from 3:00 pm on arrival and must be vacated by 11:00 am on departure.
 
-Art. 5 — Accettazione
-Firmando il presente contratto, l'ospite dichiara di aver letto, compreso e accettato integralmente tutte le condizioni sopra riportate.`;
+2) SERVIZI / SERVICES
+2.1 E' fatto assoluto divieto di usare l'acqua per usi impropri. L'utilizzo e' consentito per soli usi primari.
+It is forbidden to use water for improper uses. Use is allowed for primary purposes only.
 
-const PRIVACY_TEXT = `Informativa ai sensi del GDPR 2016/679
+2.2 Il parcheggio e' incustodito. E' severamente vietato parcheggiare l'auto nel giardino.
+The car park is unattended. It is strictly forbidden to park in the garden.
 
-Ai sensi del Regolamento UE 2016/679 (GDPR), Relais Casa Moresca, con sede in Via Didone 9, Porto Badino (LT), in qualita' di Titolare del trattamento, La informa sul trattamento dei Suoi dati personali.
+2.3 La prima pulizia e' a carico della Direzione. La pulizia nei giorni successivi e' a carico dell'Ospite.
+The first cleaning is provided by Management. Cleaning on subsequent days is the guest's responsibility.
 
-### Dati raccolti
-I dati personali raccolti durante il check-in (nome, cognome, data e luogo di nascita, nazionalita', numero e scadenza del documento) sono acquisiti per:
-• Adempimento degli obblighi di legge (comunicazione alla Questura tramite Alloggiati Web).
-• Gestione amministrativa del soggiorno.
-• Comunicazioni relative al soggiorno in corso.
+2.5 Tutti i servizi di base sono inclusi nel prezzo (acqua, luce, gas, aria condizionata, internet, prima pulizia, servizio spiaggia).
+All essential services are included in the price (water, electricity, gas, air conditioning, internet, first cleaning, beach service).
 
-### Base giuridica
-Il trattamento e' necessario per l'adempimento di obblighi legali (art. 6, par. 1, lett. c GDPR) e per l'esecuzione di un contratto (art. 6, par. 1, lett. b GDPR).
+3) OBBLIGHI E DIVIETI / OBLIGATIONS AND PROHIBITIONS
+3.1 E' vietata qualunque attivita' che possa arrecare disturbo agli ospiti e al vicinato.
+Any activity that may disturb guests or the neighborhood is prohibited.
 
-### Conservazione
-I dati saranno conservati per il tempo strettamente necessario e comunque non oltre 5 anni dalla fine del soggiorno.
+3.2 Non e' permesso fumare all'interno della Struttura. E' vietato gettare mozziconi nel giardino.
+Smoking is not allowed inside. It is forbidden to throw cigarette butts in the garden.
 
-### Diritti dell'interessato
-L'interessato ha il diritto di accedere ai propri dati, richiederne la rettifica o la cancellazione, rivolgendosi a info@bnbcasamoresca.com.
+3.4 E' vietato apportare modifiche agli arredi ed agli impianti.
+It is forbidden to change the furnishings and systems.
 
-### Consenso
-Firmando la presente informativa, l'ospite dichiara di aver preso visione e di autorizzare il trattamento dei dati personali per le finalita' sopra indicate.`;
+3.5 E' vietato introdurre animali all'interno della struttura.
+It is forbidden to bring animals inside the structure.
+
+4) RESPONSABILITA' / LIABILITY
+4.1 La Direzione non risponde dell'ammanco di oggetti e/o valori degli ospiti.
+The Management is not responsible for the shortage of objects and values of guests.
+
+4.3 Eventuali anomalie devono essere immediatamente segnalate alla proprieta'.
+Any anomalies must be immediately reported to the property.
+
+5) ACCETTAZIONE / ACCEPTANCE
+Con la firma apposta sul presente contratto, l'Ospite conferma di conoscere e accettare il regolamento della Struttura.
+By signing this contract, the Guest confirms knowledge and acceptance of the Structure's regulations.
+
+Per ogni controversia il Foro competente e' quello di Napoli (NA).
+For any dispute, the competent court is that of Naples (NA).`;
+
+const PRIVACY_TEXT = `INFORMATIVA PRIVACY / PRIVACY POLICY
+Regolamento UE 679/2016 (GDPR)
+
+ITALIANO
+Desideriamo informarLa che il Regolamento UE 679/2016 prevede la tutela delle persone rispetto al trattamento dei dati personali. Tale trattamento sara' improntato ai principi di correttezza, liceita' e trasparenza.
+
+1. I dati da Lei forniti verranno trattati con la finalita' di espletare i servizi di prenotazione turistica.
+2. Il trattamento sara' effettuato con modalita' informatizzate.
+3. Il conferimento dei dati e' obbligatorio: in mancanza non e' possibile effettuare la prenotazione.
+4. I dati saranno comunicati esclusivamente ai soggetti necessari all'espletamento del contratto di prenotazione.
+5. Il titolare del trattamento e': Relais Casa Moresca
+6. Il responsabile del trattamento e': Presta Pierpaolo - Email: info@bnbcasamoresca.com
+7. In ogni momento potra' esercitare i Suoi diritti (accesso, rettifica, cancellazione, opposizione) nei confronti del titolare del trattamento ai sensi del Regolamento UE 679/2016.
+
+ENGLISH
+We would like to inform you that the GDPR - UE 679/2016 covers an individual's rights regarding the processing of personal data.
+
+1. The data supplied by you will be used to carry out a booking.
+2. The data will be held within an electronic database.
+3. Inserting your details is obligatory: without them it is not possible to make a booking.
+4. The data will be passed on exclusively to the recipients necessary for the completion of the booking contract.
+5. The holder of the data is: Relais Casa Moresca
+6. The person responsible for the data is: Presta Pierpaolo - Email: info@bnbcasamoresca.com
+7. You can exercise your rights (access, rectification, cancellation, opposition) regarding the holder of the data at any point, as per GDPR.`;
 
 async function confirmSign(){
   const canvas = document.getElementById('firma-canvas');
@@ -533,31 +570,51 @@ async function confirmSign(){
     
     // Send email to guest if email available
     if(session.guestEmail){
-      document.getElementById('ltxt').textContent = 'Invio email all\'ospite…';
+      document.getElementById('ltxt').textContent = "Invio email all'ospite…";
       try{
-        await emailjs.send('service_tsjwj0q', 'template_92al43u', {
+        const dateStr = new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
+        const emailBody = '<div style="font-family:Georgia,sans-serif;max-width:680px;margin:0 auto;background:#FAF6F0;padding:0;">'
+          +'<div style="background:#3D3228;padding:24px 32px;text-align:center;">'
+          +'<img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" style="width:220px;height:auto;background:white;padding:8px;border-radius:4px;">'
+          +'<div style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-top:8px;">Documenti del soggiorno</div>'
+          +'</div>'
+          +'<div style="padding:28px 32px 0;">'
+          +'<p style="font-size:15px;color:#1C1C1C;line-height:1.8;">Gentile <strong>'+session.guestName+'</strong>,</p>'
+          +'<p style="font-size:14px;color:#7A7060;line-height:1.8;">di seguito trova i documenti da Lei firmati il <strong>'+dateStr+'</strong>.</p>'
+          +'</div>'
+          // CONTRATTO
+          +'<div style="margin:16px 32px;">'
+          +'<div style="background:#5C7A52;color:white;padding:10px 18px;border-radius:8px 8px 0 0;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Contratto di Soggiorno</div>'
+          +'<div style="background:white;border:1px solid #DDD5C8;border-top:none;border-radius:0 0 8px 8px;padding:20px 18px;">'
+          +'<p style="font-size:13px;color:#3D3228;font-weight:600;margin:0 0 4px;">'+session.guestName+'</p>'
+          +'<p style="font-size:12px;color:#7A7060;margin:0 0 14px;">'+session.dates+'</p>'
+          +'<pre style="font-size:11px;color:#1C1C1C;line-height:1.8;white-space:pre-wrap;font-family:Georgia,serif;">'+CONTRATTO_TEXT+'</pre>'
+          +'<div style="margin-top:16px;border-top:1px solid #DDD5C8;padding-top:14px;">'
+          +'<p style="font-size:10px;color:#7A7060;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin:0 0 8px;">Firma</p>'
+          +'<img src="'+session.firmaContratto+'" style="max-width:240px;height:auto;border:1px solid #DDD5C8;border-radius:6px;padding:4px;">'
+          +'<p style="font-size:11px;color:#7A7060;margin:6px 0 0;">Firmato il '+dateStr+'</p>'
+          +'</div></div></div>'
+          // PRIVACY
+          +'<div style="margin:0 32px 24px;">'
+          +'<div style="background:#5C7A52;color:white;padding:10px 18px;border-radius:8px 8px 0 0;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Informativa Privacy (GDPR)</div>'
+          +'<div style="background:white;border:1px solid #DDD5C8;border-top:none;border-radius:0 0 8px 8px;padding:20px 18px;">'
+          +'<pre style="font-size:11px;color:#1C1C1C;line-height:1.8;white-space:pre-wrap;font-family:Georgia,serif;">'+PRIVACY_TEXT+'</pre>'
+          +'<div style="margin-top:16px;border-top:1px solid #DDD5C8;padding-top:14px;">'
+          +'<p style="font-size:10px;color:#7A7060;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin:0 0 8px;">Firma</p>'
+          +'<img src="'+session.firmaPrivacy+'" style="max-width:240px;height:auto;border:1px solid #DDD5C8;border-radius:6px;padding:4px;">'
+          +'<p style="font-size:11px;color:#7A7060;margin:6px 0 0;">Firmato il '+dateStr+'</p>'
+          +'</div></div></div>'
+          +'<div style="padding:20px 32px;text-align:center;border-top:1px solid #DDD5C8;">'
+          +'<p style="font-size:10px;color:#7A7060;letter-spacing:0.1em;text-transform:uppercase;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT)</p>'
+          +'</div></div>';
+        
+        await emailjs.send('service_tsjwj0q','template_92al43u',{
           ospite_email: session.guestEmail,
-          messaggio_ospite: `Gentile ${session.guestName},
-
-la ringraziamo per aver scelto Relais Casa Moresca.
-
-In allegato trova i documenti da Lei firmati durante il check-in:
-• Contratto di Soggiorno
-• Informativa Privacy (GDPR)
-
-Per qualsiasi informazione siamo a Sua disposizione.
-
-A presto,
-Relais Casa Moresca`,
+          messaggio_ospite: emailBody,
           nome_ospite: session.guestName,
-        }, {
-          attachments: [
-            { name: 'Contratto_Soggiorno.pdf', data: pdfContratto },
-            { name: 'Informativa_Privacy.pdf', data: pdfPrivacy },
-          ]
         });
       }catch(e){
-        console.error('Email error:', e);
+        console.error('Email error:',e);
       }
     }
     
