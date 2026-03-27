@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Relais Casa Moresca · Firma Documenti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#FFFFFF;--calce:#F8F5F0;--calce-2:#F0EBE3;--border:#DDD5C8;
+  --olive:#5C7A52;--olive-lt:#E8F0E5;--gold:#B8943F;--gold-lt:#F5EDD8;
+  --ink:#1C1C1C;--muted:#7A7060;--arch:#3D3228;--red:#B03030;
+  --shadow:0 2px 20px rgba(28,28,28,.08);--r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--calce)}
+body{font-family:'Raleway',sans-serif;color:var(--ink);font-size:16px}
+
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s}
+.screen.active{opacity:1;pointer-events:all}
+
+/* ── WAITING SCREEN ── */
+#screen-wait{align-items:center;justify-content:center;background:var(--calce)}
+.wait-logo{text-align:center;margin-bottom:40px}
+.wait-logo img{width:320px;height:auto;display:block;margin:0 auto 12px}
+.wait-logo p{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.wait-msg{text-align:center}
+.wait-msg h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--arch);margin-bottom:12px}
+.wait-msg p{font-size:15px;color:var(--muted);line-height:1.7}
+.wait-pulse{
+  width:16px;height:16px;border-radius:50%;background:var(--olive);
+  margin:24px auto 0;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.4);opacity:1}}
+
+/* ── DOCUMENT SCREEN ── */
+#screen-doc{background:var(--white)}
+.doc-hdr{
+  background:var(--arch);
+  padding:24px 40px 20px;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.doc-hdr-left h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:400;color:white;
+  letter-spacing:.04em;
+}
+.doc-hdr-left p{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+.doc-step{
+  display:flex;align-items:center;gap:8px;
+}
+.step-dot{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
+  border:2px solid rgba(255,255,255,.3);
+  color:rgba(255,255,255,.5);
+}
+.step-dot.active{background:var(--gold);border-color:var(--gold);color:white}
+.step-dot.done{background:var(--olive);border-color:var(--olive);color:white}
+.step-line{width:24px;height:2px;background:rgba(255,255,255,.2)}
+.step-line.done{background:var(--olive)}
+
+.doc-body{
+  flex:1;display:flex;gap:0;overflow:hidden;
+}
+
+/* Document text panel */
+.doc-text-panel{
+  flex:1;overflow-y:auto;padding:32px 40px;
+  border-right:1px solid var(--border);
+  -webkit-overflow-scrolling:touch;
+}
+.doc-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:500;color:var(--arch);
+  margin-bottom:6px;
+}
+.doc-subtitle{
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:24px;font-weight:600;
+}
+.doc-guest{
+  background:var(--calce);border-radius:10px;
+  padding:14px 18px;margin-bottom:24px;
+  border-left:3px solid var(--olive);
+  font-size:14px;color:var(--muted);
+}
+.doc-guest strong{color:var(--ink);font-size:16px;display:block;margin-bottom:2px}
+.doc-content{
+  font-size:14px;line-height:1.9;color:var(--ink);
+}
+.doc-content p{margin-bottom:14px}
+.doc-content h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;color:var(--arch);margin:20px 0 8px;
+}
+
+/* Signature panel */
+.doc-sign-panel{
+  width:380px;flex-shrink:0;
+  display:flex;flex-direction:column;
+  padding:28px 28px 24px;
+  background:var(--calce);
+}
+.sign-label{
+  font-size:11px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:10px;
+}
+.sign-instruction{
+  font-size:13px;color:var(--muted);line-height:1.6;
+  margin-bottom:16px;
+}
+#firma-canvas{
+  width:100%;flex:1;min-height:220px;
+  display:block;
+  border:2px dashed var(--border);
+  border-radius:12px;
+  background:white;
+  cursor:crosshair;
+  touch-action:none;
+  margin-bottom:14px;
+}
+#firma-canvas.has-sig{border-style:solid;border-color:var(--olive);background:white}
+
+.sign-actions{display:flex;gap:10px;margin-bottom:20px}
+.btn-clear{
+  flex:1;padding:12px;border:1px solid var(--border);
+  border-radius:9px;background:white;color:var(--muted);
+  font-family:'Raleway',sans-serif;font-size:13px;font-weight:600;
+  letter-spacing:.06em;cursor:pointer;
+}
+.btn-clear:active{background:var(--calce-2)}
+
+.btn-confirm{
+  flex:2;padding:12px;border:none;
+  border-radius:9px;background:var(--olive);color:white;
+  font-family:'Raleway',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  box-shadow:0 4px 14px rgba(92,122,82,.3);
+}
+.btn-confirm:active{background:#4a6643;transform:scale(.98)}
+.btn-confirm:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+.sign-privacy{
+  font-size:11px;color:var(--muted);line-height:1.6;
+  text-align:center;
+}
+
+/* ── SUCCESS SCREEN ── */
+#screen-done{
+  background:var(--calce);
+  align-items:center;justify-content:center;
+  text-align:center;padding:40px;
+}
+.done-icon{
+  width:100px;height:100px;
+  border-radius:50px 50px 0 0;
+  background:var(--olive-lt);
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;margin:0 auto 28px;
+  animation:pop .5s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+#screen-done h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;color:var(--arch);font-weight:400;
+  margin-bottom:12px;
+}
+#screen-done p{font-size:15px;color:var(--muted);line-height:1.8;max-width:500px;margin:0 auto}
+
+/* ── LOADER ── */
+.loader{position:fixed;inset:0;background:rgba(248,245,240,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:500;opacity:0;pointer-events:none;transition:opacity .2s}
+.loader.on{opacity:1;pointer-events:all}
+.spin{width:40px;height:40px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--olive);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader p{font-size:14px;color:var(--muted);letter-spacing:.06em}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('I9MHhau0Zw3ZcX7mj');</script>
+</head>
+<body>
+
+<div class="loader" id="ldr"><div class="spin"></div><p id="ltxt">Caricamento…</p></div>
+
+<!-- ════════ ATTESA ════════ -->
+<div class="screen active" id="screen-wait">
+  <div class="wait-logo">
+    <img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" alt="Relais Casa Moresca" style="mix-blend-mode:multiply;">
+    <p>Porto Badino · Riviera di Ulisse</p>
+  </div>
+  <div class="wait-msg">
+    <h2>Firma Documenti</h2>
+    <p>In attesa dell'operatore…<br>La schermata si aggiornerà automaticamente.</p>
+    <div class="wait-pulse"></div>
+  </div>
+</div>
+
+<!-- ════════ DOCUMENTO ════════ -->
+<div class="screen" id="screen-doc">
+  <div class="doc-hdr">
+    <div class="doc-hdr-left">
+      <h1 id="doc-hdr-title">Contratto di Soggiorno</h1>
+      <p id="doc-hdr-guest">—</p>
+    </div>
+    <div class="doc-step">
+      <div class="step-dot active" id="dot-1">1</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-dot" id="dot-2">2</div>
+    </div>
+  </div>
+  <div class="doc-body">
+    <div class="doc-text-panel">
+      <div class="doc-title" id="doc-title">Contratto di Soggiorno</div>
+      <div class="doc-subtitle" id="doc-subtitle">Relais Casa Moresca · Porto Badino (LT)</div>
+      <div class="doc-guest">
+        <strong id="doc-guest-name">—</strong>
+        <span id="doc-guest-dates">—</span>
+      </div>
+      <div class="doc-content" id="doc-content"></div>
+    </div>
+    <div class="doc-sign-panel">
+      <div class="sign-label">Firma qui</div>
+      <div class="sign-instruction" id="sign-instruction">Leggere il documento e firmare nello spazio sottostante con il dito o con Apple Pencil.</div>
+      <canvas id="firma-canvas"></canvas>
+      <div class="sign-actions">
+        <button class="btn-clear" onclick="clearSig()">🗑 Cancella</button>
+        <button class="btn-confirm" id="btn-confirm" onclick="confirmSign()" disabled>Conferma →</button>
+      </div>
+      <div class="sign-privacy" id="sign-privacy-note">Firmando dichiaro di aver letto e accettato il documento.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ COMPLETATO ════════ -->
+<div class="screen" id="screen-done">
+  <div class="done-icon">✅</div>
+  <h2>Documenti firmati</h2>
+  <p id="done-msg">Grazie. Le firme sono state acquisite correttamente.<br>Buon soggiorno a Relais Casa Moresca.</p>
+</div>
+
+<script>
+const WORKER = 'https://red-resonance-d4ba.bnbcasamoresca.workers.dev';
+const FIRMA_KEY = 'firma_session';
+const POLL_INTERVAL = 3000; // check every 3 seconds
+
+let currentStep = 1; // 1 = contratto, 2 = privacy
+let session = null;
+let pollTimer = null;
+
+// ── DOCUMENTS TEXT ──────────────────────────────────
+const CONTRATTO = `
+<h3>Art. 1 — Oggetto del contratto</h3>
+<p>Il presente contratto regola il soggiorno presso Relais Casa Moresca, sito in Via Didone 9, Porto Badino (LT), di seguito denominata "Struttura".</p>
+<h3>Art. 2 — Regolamento interno</h3>
+<p>L'ospite si impegna a rispettare il regolamento interno della Struttura, disponibile all'ingresso e sul sito bnbcasamoresca.com. In particolare:</p>
+<p>• Orario di silenzio: dalle ore 23:00 alle ore 08:00.<br>
+• È vietato introdurre nella Struttura animali domestici non preventivamente dichiarati.<br>
+• È vietato fumare all'interno degli ambienti chiusi.<br>
+• L'accesso alla piscina è consentito negli orari indicati.</p>
+<h3>Art. 3 — Responsabilità</h3>
+<p>L'ospite è responsabile di eventuali danni arrecati alla Struttura, agli arredi e alle attrezzature durante il proprio soggiorno. Eventuali danni saranno addebitati al momento del check-out sulla base di un preventivo.</p>
+<h3>Art. 4 — Check-out</h3>
+<p>Il check-out deve avvenire entro le ore 10:00 del giorno di partenza, salvo diversi accordi scritti con la direzione. Oltre tale orario potrà essere addebitato un supplemento.</p>
+<h3>Art. 5 — Accettazione</h3>
+<p>Firmando il presente contratto, l'ospite dichiara di aver letto, compreso e accettato integralmente tutte le condizioni sopra riportate.</p>
+`;
+
+const PRIVACY = `
+<h3>Informativa ai sensi del GDPR 2016/679</h3>
+<p>Ai sensi e per gli effetti del Regolamento UE 2016/679 (GDPR), Relais Casa Moresca, con sede in Via Didone 9, Porto Badino (LT), in qualità di Titolare del trattamento, La informa sul trattamento dei Suoi dati personali.</p>
+<h3>Dati raccolti</h3>
+<p>I dati personali raccolti durante il check-in (nome, cognome, data e luogo di nascita, nazionalità, numero e scadenza del documento di identità) sono acquisiti per le seguenti finalità:</p>
+<p>• Adempimento degli obblighi di legge (comunicazione alla Questura tramite il portale Alloggiati Web del Ministero dell'Interno).<br>
+• Gestione amministrativa del soggiorno.<br>
+• Comunicazioni relative al soggiorno in corso.</p>
+<h3>Base giuridica</h3>
+<p>Il trattamento è necessario per l'adempimento di obblighi legali (art. 6, par. 1, lett. c GDPR) e per l'esecuzione di un contratto di cui l'interessato è parte (art. 6, par. 1, lett. b GDPR).</p>
+<h3>Conservazione</h3>
+<p>I dati saranno conservati per il tempo strettamente necessario all'adempimento degli obblighi di legge e comunque non oltre 5 anni dalla fine del soggiorno.</p>
+<h3>Diritti dell'interessato</h3>
+<p>L'interessato ha il diritto di accedere ai propri dati, richiederne la rettifica, la cancellazione, la limitazione del trattamento o opporsi allo stesso, rivolgendosi a info@bnbcasamoresca.com.</p>
+<h3>Consenso</h3>
+<p>Firmando la presente informativa, l'ospite dichiara di aver preso visione dell'informativa sul trattamento dei dati personali e di autorizzarne il trattamento per le finalità sopra indicate.</p>
+`;
+
+// ── SCREENS ─────────────────────────────────────────
+function showScr(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+function showLdr(t){document.getElementById('ltxt').textContent=t||'…';document.getElementById('ldr').classList.add('on')}
+function hideLdr(){document.getElementById('ldr').classList.remove('on')}
+
+// ── POLLING ─────────────────────────────────────────
+async function poll(){
+  try{
+    const r = await fetch(WORKER+'/load?key='+FIRMA_KEY);
+    const data = await r.json();
+    if(data && data.status === 'ready' && data.guestName){
+      clearInterval(pollTimer);
+      session = data;
+      startSigning();
+    }
+  }catch(e){
+    // Silent fail - keep polling
+  }
+}
+
+function startPolling(){
+  pollTimer = setInterval(poll, POLL_INTERVAL);
+  poll(); // immediate first check
+}
+
+// ── SIGNING FLOW ────────────────────────────────────
+function startSigning(){
+  currentStep = 1;
+  loadStep(1);
+  showScr('screen-doc');
+}
+
+function loadStep(step){
+  const isContratto = step === 1;
+  
+  // Update header
+  document.getElementById('doc-hdr-title').textContent = isContratto ? 'Contratto di Soggiorno' : 'Informativa Privacy';
+  document.getElementById('doc-hdr-guest').textContent = session.guestName + ' · ' + (session.dates||'');
+  document.getElementById('doc-guest-name').textContent = session.guestName;
+  document.getElementById('doc-guest-dates').textContent = session.dates||'';
+  
+  // Update content
+  document.getElementById('doc-title').textContent = isContratto ? 'Contratto di Soggiorno' : 'Informativa Privacy (GDPR)';
+  document.getElementById('doc-subtitle').textContent = 'Relais Casa Moresca · Porto Badino (LT)';
+  document.getElementById('doc-content').innerHTML = isContratto ? CONTRATTO : PRIVACY;
+  
+  // Update step dots
+  document.getElementById('dot-1').className = 'step-dot' + (step===1?' active':' done');
+  document.getElementById('dot-1').textContent = step===1 ? '1' : '✓';
+  document.getElementById('dot-2').className = 'step-dot' + (step===2?' active':'');
+  document.getElementById('line-1').className = 'step-line' + (step===2?' done':'');
+  
+  document.getElementById('sign-instruction').textContent = isContratto 
+    ? 'Leggete il contratto e firmate per accettazione.'
+    : 'Leggete l\'informativa e firmate per presa visione.';
+  
+  document.getElementById('sign-privacy-note').textContent = isContratto
+    ? 'Firmando accetto il contratto di soggiorno.'
+    : 'Firmando autorizzo il trattamento dei dati personali.';
+  
+  // Reset canvas
+  clearSig();
+  
+  // Scroll text to top
+  document.querySelector('.doc-text-panel').scrollTop = 0;
+}
+
+function generatePDF(docType, sigData){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const W = doc.internal.pageSize.getWidth();
+  
+  // Header
+  doc.setFillColor(61, 50, 40);
+  doc.rect(0, 0, W, 28, 'F');
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(16);
+  doc.setTextColor(255,255,255);
+  doc.text('Relais Casa Moresca', W/2, 12, {align:'center'});
+  doc.setFontSize(9);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(200,190,180);
+  doc.text('Via Didone 9 · Porto Badino (LT) · bnbcasamoresca.com', W/2, 20, {align:'center'});
+  
+  // Title
+  const title = docType === 'contratto' ? 'CONTRATTO DI SOGGIORNO' : 'INFORMATIVA PRIVACY (GDPR)';
+  doc.setFontSize(14);
+  doc.setFont('helvetica','bold');
+  doc.setTextColor(61,50,40);
+  doc.text(title, W/2, 40, {align:'center'});
+  
+  // Guest info
+  doc.setFontSize(10);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(100,90,80);
+  doc.text('Ospite: '+session.guestName+'  ·  '+session.dates, W/2, 50, {align:'center'});
+  
+  // Separator
+  doc.setDrawColor(200,190,180);
+  doc.line(20, 55, W-20, 55);
+  
+  // Content
+  doc.setFontSize(10);
+  doc.setTextColor(28,28,28);
+  doc.setFont('helvetica','normal');
+  
+  const rawText = docType === 'contratto' ? CONTRATTO_TEXT : PRIVACY_TEXT;
+  const lines = doc.splitTextToSize(rawText, W - 40);
+  let y = 65;
+  const lineH = 5.5;
+  const pageH = doc.internal.pageSize.getHeight();
+  
+  lines.forEach(line => {
+    if(y > pageH - 60){ doc.addPage(); y = 20; }
+    if(line.startsWith('###')){
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(11);
+      doc.setTextColor(61,50,40);
+      doc.text(line.replace('### ',''), 20, y);
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(10);
+      doc.setTextColor(28,28,28);
+      y += lineH + 2;
+    } else {
+      doc.text(line, 20, y);
+      y += lineH;
+    }
+  });
+  
+  // Signature box
+  if(y > pageH - 55){ doc.addPage(); y = 20; }
+  y += 8;
+  doc.setDrawColor(92,122,82);
+  doc.setLineWidth(0.5);
+  doc.rect(20, y, W-40, 40);
+  doc.setFontSize(9);
+  doc.setTextColor(100,90,80);
+  doc.text('FIRMA', 22, y+6);
+  
+  // Add signature image
+  try{
+    doc.addImage(sigData, 'PNG', 22, y+8, W-44, 28);
+  }catch(e){}
+  
+  // Date
+  y += 48;
+  doc.setFontSize(9);
+  doc.setTextColor(100,90,80);
+  doc.text('Data: '+new Date().toLocaleDateString('it-IT')+'  ·  Ora: '+new Date().toLocaleTimeString('it-IT'), 20, y);
+  
+  return doc.output('datauristring').split(',')[1];
+}
+
+const CONTRATTO_TEXT = `Art. 1 — Oggetto del contratto
+Il presente contratto regola il soggiorno presso Relais Casa Moresca, sito in Via Didone 9, Porto Badino (LT).
+
+Art. 2 — Regolamento interno
+L'ospite si impegna a rispettare il regolamento interno della Struttura. In particolare:
+• Orario di silenzio: dalle ore 23:00 alle ore 08:00.
+• E' vietato introdurre animali domestici non preventivamente dichiarati.
+• E' vietato fumare all'interno degli ambienti chiusi.
+• L'accesso alla piscina e' consentito negli orari indicati.
+
+Art. 3 — Responsabilita'
+L'ospite e' responsabile di eventuali danni arrecati alla Struttura, agli arredi e alle attrezzature durante il proprio soggiorno. Eventuali danni saranno addebitati al momento del check-out.
+
+Art. 4 — Check-out
+Il check-out deve avvenire entro le ore 10:00 del giorno di partenza, salvo diversi accordi scritti con la direzione.
+
+Art. 5 — Accettazione
+Firmando il presente contratto, l'ospite dichiara di aver letto, compreso e accettato integralmente tutte le condizioni sopra riportate.`;
+
+const PRIVACY_TEXT = `Informativa ai sensi del GDPR 2016/679
+
+Ai sensi del Regolamento UE 2016/679 (GDPR), Relais Casa Moresca, con sede in Via Didone 9, Porto Badino (LT), in qualita' di Titolare del trattamento, La informa sul trattamento dei Suoi dati personali.
+
+### Dati raccolti
+I dati personali raccolti durante il check-in (nome, cognome, data e luogo di nascita, nazionalita', numero e scadenza del documento) sono acquisiti per:
+• Adempimento degli obblighi di legge (comunicazione alla Questura tramite Alloggiati Web).
+• Gestione amministrativa del soggiorno.
+• Comunicazioni relative al soggiorno in corso.
+
+### Base giuridica
+Il trattamento e' necessario per l'adempimento di obblighi legali (art. 6, par. 1, lett. c GDPR) e per l'esecuzione di un contratto (art. 6, par. 1, lett. b GDPR).
+
+### Conservazione
+I dati saranno conservati per il tempo strettamente necessario e comunque non oltre 5 anni dalla fine del soggiorno.
+
+### Diritti dell'interessato
+L'interessato ha il diritto di accedere ai propri dati, richiederne la rettifica o la cancellazione, rivolgendosi a info@bnbcasamoresca.com.
+
+### Consenso
+Firmando la presente informativa, l'ospite dichiara di aver preso visione e di autorizzare il trattamento dei dati personali per le finalita' sopra indicate.`;
+
+async function confirmSign(){
+  const canvas = document.getElementById('firma-canvas');
+  if(isBlank(canvas)){ alert('Firma richiesta prima di procedere.'); return; }
+  
+  const sigData = canvas.toDataURL('image/png');
+  
+  if(currentStep === 1){
+    session.firmaContratto = sigData;
+    currentStep = 2;
+    loadStep(2);
+    document.getElementById('btn-confirm').textContent = 'Completa ✓';
+  } else {
+    session.firmaPrivacy = sigData;
+    session.status = 'signed';
+    session.signedAt = new Date().toLocaleString('it-IT');
+    
+    showLdr('Generazione documenti…');
+    
+    // Generate PDFs
+    let pdfContratto = '', pdfPrivacy = '';
+    try{
+      pdfContratto = generatePDF('contratto', session.firmaContratto);
+      pdfPrivacy = generatePDF('privacy', session.firmaPrivacy);
+    }catch(e){
+      console.error('PDF error:', e);
+    }
+    
+    // Save to KV
+    document.getElementById('ltxt').textContent = 'Salvataggio…';
+    try{
+      await fetch(WORKER+'/save', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({key: FIRMA_KEY, data: {
+          ...session,
+          pdfContratto,
+          pdfPrivacy,
+        }})
+      });
+    }catch(e){}
+    
+    // Send email to guest if email available
+    if(session.guestEmail){
+      document.getElementById('ltxt').textContent = 'Invio email all\'ospite…';
+      try{
+        await emailjs.send('service_tsjwj0q', 'template_92al43u', {
+          ospite_email: session.guestEmail,
+          messaggio_ospite: `Gentile ${session.guestName},
+
+la ringraziamo per aver scelto Relais Casa Moresca.
+
+In allegato trova i documenti da Lei firmati durante il check-in:
+• Contratto di Soggiorno
+• Informativa Privacy (GDPR)
+
+Per qualsiasi informazione siamo a Sua disposizione.
+
+A presto,
+Relais Casa Moresca`,
+          nome_ospite: session.guestName,
+        }, {
+          attachments: [
+            { name: 'Contratto_Soggiorno.pdf', data: pdfContratto },
+            { name: 'Informativa_Privacy.pdf', data: pdfPrivacy },
+          ]
+        });
+      }catch(e){
+        console.error('Email error:', e);
+      }
+    }
+    
+    hideLdr();
+    showScr('screen-done');
+    document.getElementById('done-msg').innerHTML = 
+      `Grazie <strong>${session.guestName}</strong>.<br>Le firme sono state acquisite correttamente.<br>${session.guestEmail ? 'I documenti firmati sono stati inviati a <strong>'+session.guestEmail+'</strong>.' : ''}<br><br>Buon soggiorno a Relais Casa Moresca.`;
+    
+    setTimeout(()=>{ resetSession(); }, 30000);
+  }
+}
+
+async function resetSession(){
+  session = null;
+  currentStep = 1;
+  document.getElementById('btn-confirm').textContent = 'Conferma →';
+  try{
+    await fetch(WORKER+'/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({key: FIRMA_KEY, data: {status:'waiting'}})
+    });
+  }catch(e){}
+  showScr('screen-wait');
+  startPolling();
+}
+
+// ── SIGNATURE CANVAS ────────────────────────────────
+(function initCanvas(){
+  const canvas = document.getElementById('firma-canvas');
+  if(!canvas) return;
+  
+  // Size canvas properly for iPad
+  function resizeCanvas(){
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * window.devicePixelRatio;
+    canvas.height = rect.height * window.devicePixelRatio;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+  
+  setTimeout(resizeCanvas, 100);
+  window.addEventListener('resize', resizeCanvas);
+  
+  const ctx = canvas.getContext('2d');
+  let drawing = false, lx=0, ly=0;
+  
+  function pos(e){
+    const r = canvas.getBoundingClientRect();
+    if(e.touches) return [e.touches[0].clientX - r.left, e.touches[0].clientY - r.top];
+    return [e.clientX - r.left, e.clientY - r.top];
+  }
+  
+  function startDraw(e){
+    e.preventDefault();
+    drawing = true;
+    [lx, ly] = pos(e);
+  }
+  
+  function draw(e){
+    if(!drawing) return;
+    e.preventDefault();
+    const [x, y] = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = '#1C1C1C';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    [lx, ly] = [x, y];
+    canvas.classList.add('has-sig');
+    document.getElementById('btn-confirm').disabled = false;
+  }
+  
+  function endDraw(){ drawing = false; }
+  
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('touchstart', startDraw, {passive:false});
+  canvas.addEventListener('touchmove', draw, {passive:false});
+  canvas.addEventListener('touchend', endDraw);
+})();
+
+function clearSig(){
+  const canvas = document.getElementById('firma-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.classList.remove('has-sig');
+  document.getElementById('btn-confirm').disabled = true;
+}
+
+function isBlank(canvas){
+  return !canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data.some(v=>v!==0);
+}
+
+// ── INIT ────────────────────────────────────────────
+startPolling();
+</script>
+</body>
+</html>
