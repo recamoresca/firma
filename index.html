@@ -256,41 +256,61 @@ let pollTimer = null;
 
 // ── DOCUMENTS TEXT ──────────────────────────────────
 const CONTRATTO = `
-<h3>Contratto di Locazione Turistica / Tourist Lease Contract</h3>
-<p>Il gestore concede in locazione all'ospite, per il solo uso turistico, l'unità immobiliare denominata <strong>"Relais Casa Moresca"</strong>, sita in Terracina, Porto Badino, via Didone n.9, composta da 3 vani, cucina e servizi, completamente ammobiliata.</p>
-<p><em>The manager leases to the guest, for tourist use only, the real estate unit called "Relais Casa Moresca", via Didone n.9, Porto Badino, consisting of 3 rooms, kitchen and bathroom, fully furnished.</em></p>
-<h3>1) Check-in / Check-out</h3>
-<p>La struttura può essere occupata dalle ore <strong>15:00</strong> del giorno di arrivo e deve essere lasciata entro le ore <strong>11:00</strong> del giorno di partenza.</p>
-<h3>2) Servizi inclusi</h3>
-<p>Tutti i servizi di base sono inclusi nel prezzo: acqua, luce, gas, aria condizionata, internet, prima pulizia, servizio spiaggia con ombrellone e lettini.</p>
-<h3>3) Obblighi e divieti</h3>
-<p>• È vietata qualunque attività che possa arrecare disturbo agli ospiti e al vicinato.<br>
-• Non è permesso fumare all'interno della Struttura.<br>
-• È vietato introdurre animali all'interno della struttura.<br>
-• È severamente vietato parcheggiare l'auto nel giardino.<br>
-• È vietato apportare modifiche agli arredi e agli impianti.</p>
-<h3>4) Responsabilità</h3>
-<p>La Direzione non risponde dell'ammanco di oggetti e/o valori degli ospiti. Eventuali anomalie devono essere immediatamente segnalate alla proprietà.</p>
-<h3>5) Accettazione</h3>
-<p>Con la firma apposta sul presente contratto, l'Ospite conferma di aver letto, compreso e di accettare integralmente il regolamento della Struttura. Per ogni controversia il Foro competente è quello di Napoli (NA).</p>
-`;
+<h3 style="color:#3D3228;margin:0 0 6px">CONTRATTO DI LOCAZIONE TURISTICA</h3>
+<p style="font-size:11px;color:#7A7060;margin:0 0 18px;letter-spacing:.08em;text-transform:uppercase">TOURIST LEASE CONTRACT</p>
+
+<p>Il gestore concede in locazione all'ospite, che accetta nel medesimo stato di fatto e di diritto in cui si trova, per il solo uso turistico e con esclusione di ogni altro, l'unità immobiliare denominata <strong>"Relais Casa Moresca"</strong>, sita in Terracina, località Porto Badino, via Didone n.9, composta da 3 vani, oltre a cucina e servizi, completamente ammobiliata, di seguito Struttura.</p>
+<p><em>The manager leases to the guest, who accepts in the same state of fact and law in which it is located, for tourist use only and with the exclusion of any other, the real estate unit called "Relais Casa Moresca," located in Terracina, Porto Badino locality, via Didone n.9, consisting of 3 rooms, as well as kitchen and bathroom, fully furnished, from now on Structure.</em></p>
+
+<h3>1) CHECK-IN / CHECK-OUT</h3>
+<p>1.1 La struttura può essere occupata a partire dalle ore 15.00 del giorno di arrivo e deve essere lasciata entro le ore 11.00 del giorno di partenza.<br><em>The structure can be occupied from 3.00 pm on the day of arrival and must be vacated by 11.00 am on the day of departure.</em></p>
+<p>1.2 Il corrispettivo dovuto per tutta la durata del soggiorno deve essere corrisposto, a saldo, al momento del check-in.<br><em>The amount due for the entire duration of the stay must be paid in full at check-in time.</em></p>
+
+<h3>2) SERVIZI / SERVICES</h3>
+<p>2.1 L'acqua erogata nella Struttura è potabile. È fatto assoluto divieto di usare l'acqua per usi impropri.<br><em>The water supplied in the Structure is drinkable. It is forbidden to use water for improper uses.</em></p>
+<p>2.2 Il parcheggio è incustodito. È severamente vietato parcheggiare l'auto nel giardino della Struttura.<br><em>The car park is unattended. It is strictly forbidden to park the car in the garden of the Structure.</em></p>
+<p>2.3 La prima pulizia dei locali è a carico della Direzione. La pulizia nei giorni successivi è a carico dell'Ospite.<br><em>The first cleaning of the premises is the responsibility of the Management. The guest is responsible for cleaning on subsequent days.</em></p>
+<p>2.5 Tutti i servizi di base sono inclusi nel prezzo pagato per il soggiorno: acqua, luce, gas, aria climatizzata, internet, prima pulizia, servizio spiaggia con ombrellone, due sedie sdraio e due lettini.<br><em>All essential services are included in the price paid for the stay: water, electricity, gas, air conditioning, internet, first cleaning, beach service with umbrella, two deck chairs and sunbeds.</em></p>
+<p>2.6 Connessione Internet gratuita. Nel rispetto della Legge 155/2005, le connessioni sono controllate da apposito server.<br><em>Internet connection is free. In compliance with Law 155/2005, connections are controlled by a particular server.</em></p>
+
+<h3>3) OBBLIGHI E DIVIETI / OBLIGATIONS AND PROHIBITIONS</h3>
+<p>3.1 È vietata qualunque attività che possa arrecare disturbo agli ospiti e al vicinato. Ogni trasgressione comporterà la risoluzione immediata del contratto.<br><em>Any activity that may disturb the neighborhood is prohibited. Any violation will result in the immediate termination of the contract.</em></p>
+<p>3.2 Non è permesso fumare all'interno della Struttura. È severamente vietato gettare mozziconi nel giardino.<br><em>Smoking is not allowed inside the Structure. It is strictly forbidden to throw cigarette butts in the garden.</em></p>
+<p>3.4 È vietato apportare modifiche agli arredi ed agli impianti di cui è dotato l'alloggio.<br><em>It is forbidden to change the furnishings and systems the accommodation is equipped with.</em></p>
+<p>3.5 È vietato introdurre animali all'interno della struttura.<br><em>It is forbidden to bring animals inside the structure.</em></p>
+<p>3.6 È severamente vietato parcheggiare l'auto nel giardino della Struttura.<br><em>It is strictly forbidden to park the car in the garden of the Structure.</em></p>
+
+<h3>4) RESPONSABILITÀ / LIABILITY</h3>
+<p>4.1 La Direzione non risponde dell'ammanco di oggetti e/o valori degli ospiti, né di danneggiamenti conseguenti ad eventi di forza maggiore.<br><em>The Management is not responsible for the shortage of objects and values of the guests, or damage resulting from events of force majeure.</em></p>
+<p>4.2 Particolare attenzione dovrà essere prestata a: chiusura dei rubinetti, spegnimento di luci ed apparecchiature elettriche quando non utilizzate, uso corretto di condizionatori ed elettrodomestici.<br><em>Particular attention must be paid to: closing taps, turning off lights and electrical equipment when not in use, correct use of air conditioners and appliances.</em></p>
+<p>4.3 Eventuali anomalie devono essere immediatamente segnalate alla proprietà.<br><em>Any anomalies must be immediately reported to the property.</em></p>
+
+<h3>5) ACCETTAZIONE / ACCEPTANCE OF THE RULES</h3>
+<p>Con la firma apposta sul presente contratto e la presa in consegna delle chiavi della Struttura, l'Ospite conferma esplicitamente di conoscere il regolamento della Struttura e le accetta tutte, indistintamente, senza riserva alcuna.<br><em>By signing this contract and taking delivery of the keys of the Structure, the Guest explicitly confirms that he is familiar with the rules of the Structure and accepts them all, without distinction, without any reservation.</em></p>
+<p>Per ogni controversia il Foro competente è quello di Napoli (NA).<br><em>For any dispute, the competent court is that of Naples (NA).</em></p>
+`
 
 const PRIVACY = `
-<h3>Informativa Privacy / Privacy Policy</h3>
-<p>Ai sensi del Regolamento UE 679/2016 (GDPR), <strong>Relais Casa Moresca</strong>, Via Didone 9, Porto Badino (LT), in qualità di Titolare del trattamento, La informa sul trattamento dei Suoi dati personali.</p>
-<p><em>In compliance with GDPR UE 679/2016, Relais Casa Moresca informs you about the processing of your personal data.</em></p>
-<h3>Finalità del trattamento / Purpose</h3>
-<p>I dati forniti verranno trattati per: espletare i servizi di prenotazione turistica, adempiere agli obblighi di legge (comunicazione alla Questura), gestione amministrativa del soggiorno.</p>
-<p><em>Data will be used for: tourist booking services, legal obligations (police registration), administrative management of stay.</em></p>
-<h3>Titolare / Data Controller</h3>
-<p><strong>Relais Casa Moresca</strong> — Responsabile: Presta Pierpaolo<br>Email: info@bnbcasamoresca.com</p>
+<h3 style="color:#3D3228;margin:0 0 6px">INFORMATIVA PRIVACY</h3>
+<p style="font-size:11px;color:#7A7060;margin:0 0 18px;letter-spacing:.08em;text-transform:uppercase">PRIVACY POLICY · Regolamento UE 679/2016 (GDPR)</p>
+
+<p>Desideriamo informarLa che il Regolamento UE 679/2016 ("GDPR") prevede la tutela delle persone e di altri soggetti rispetto al trattamento dei dati personali. Tale trattamento sarà improntato ai principi di correttezza, liceità e trasparenza e di tutela della Sua riservatezza e dei Suoi diritti.</p>
+<p><em>We would like to inform you that the General Data Protection Regulation (GDPR) - UE 679/2016, covers an individual's rights regarding the processing of personal data. We ensure that your details will be handled in compliance with this regulation, ensuring transparency and protection of your privacy and rights.</em></p>
+
+<p><strong>1.</strong> I dati da Lei forniti verranno trattati con la finalità di espletare i servizi di prenotazione turistica.<br><em>The data supplied by you will be used to carry out a booking.</em></p>
+<p><strong>2.</strong> Il trattamento sarà effettuato con modalità informatizzate.<br><em>The data will be held within an electronic database.</em></p>
+<p><strong>3.</strong> Il conferimento dei dati è obbligatorio: in mancanza non è possibile effettuare la prenotazione.<br><em>Inserting your details is obligatory: without them it is not possible to make a booking.</em></p>
+<p><strong>4.</strong> I dati saranno comunicati esclusivamente ai soggetti necessari all'espletamento del contratto di prenotazione.<br><em>The data will be passed on exclusively to the recipients necessary for the completion of the booking contract.</em></p>
+<p><strong>5.</strong> Il titolare del trattamento è: <strong>Relais Casa Moresca</strong><br><em>The holder of the data is: Relais Casa Moresca</em></p>
+<p><strong>6.</strong> Il responsabile del trattamento è: <strong>Presta Pierpaolo</strong> — Email: info@bnbcasamoresca.com<br><em>The person responsible for the data is: Presta Pierpaolo — Email: info@bnbcasamoresca.com</em></p>
+<p><strong>7.</strong> In ogni momento potrà esercitare i Suoi diritti nei confronti del titolare del trattamento ai sensi del Regolamento UE 679/2016:<br><em>You can exercise your rights regarding the holder of the data at any point, as per GDPR:</em></p>
+
 <h3>Diritti dell'interessato / Your Rights</h3>
-<p>In ogni momento potrà esercitare i diritti di accesso, rettifica, cancellazione e opposizione al trattamento dei dati, contattando info@bnbcasamoresca.com.</p>
-<p><em>You may exercise your rights of access, rectification, cancellation and opposition by contacting info@bnbcasamoresca.com.</em></p>
-<h3>Consenso / Consent</h3>
-<p>Firmando la presente informativa, l'ospite dichiara di aver preso visione e di autorizzare il trattamento dei dati personali per le finalità indicate.</p>
-<p><em>By signing, the guest confirms having read and authorizes the processing of personal data for the purposes indicated.</em></p>
-`;
+<p>L'interessato ha diritto di ottenere la conferma dell'esistenza o meno di dati personali che lo riguardano e la loro comunicazione in forma intelligibile. Ha inoltre diritto di ottenere l'aggiornamento, la rettificazione, la cancellazione o il blocco dei dati trattati in violazione di legge. L'interessato ha infine diritto di opporsi, per motivi legittimi, al trattamento dei dati personali che lo riguardano.</p>
+<p><em>The person concerned has the right to obtain the confirmation of the existence or not of personal details which concern them. They also have the right to obtain updating, rectifying, cancellation, or blocking of data processed in violation of the law. They have the right to object, with legitimate reason, to the processing of their personal data.</em></p>
+
+<p style="margin-top:18px;padding-top:14px;border-top:1px solid #DDD5C8;">Titolare: <strong>Relais Casa Moresca</strong> · Responsabile: <strong>Presta Pierpaolo</strong><br>Email: info@bnbcasamoresca.com · Web: bnbcasamoresca.com</p>
+``;
 
 // ── SCREENS ─────────────────────────────────────────
 function showScr(id){
