@@ -601,19 +601,23 @@ async function confirmSign(){
         
         // Build compact signature images (resize to reduce size)
         function compressSig(dataUrl){
-          const canvas = document.createElement('canvas');
-          canvas.width = 300; canvas.height = 80;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = 'white';
-          ctx.fillRect(0,0,300,80);
-          const img = new Image();
-          img.src = dataUrl;
-          ctx.drawImage(img, 0, 0, 300, 80);
-          return canvas.toDataURL('image/jpeg', 0.6).split(',')[1];
+          return new Promise((resolve) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 300; canvas.height = 80;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0,0,300,80);
+            const img = new Image();
+            img.onload = () => {
+              ctx.drawImage(img, 0, 0, 300, 80);
+              resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
+            };
+            img.src = dataUrl;
+          });
         }
         
-        const sigC = compressSig(session.firmaContratto);
-        const sigP = compressSig(session.firmaPrivacy);
+        const sigC = await compressSig(session.firmaContratto);
+        const sigP = await compressSig(session.firmaPrivacy);
         
         // Save signatures to KV and get public URLs
         const sigKey = 'sig_' + session.bookingId + '_' + Date.now();
