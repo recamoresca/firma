@@ -615,25 +615,69 @@ async function confirmSign(){
         const sigC = compressSig(session.firmaContratto);
         const sigP = compressSig(session.firmaPrivacy);
         
-        const emailHtml = `<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:600px;margin:0 auto;background:#FAF6F0;padding:24px;">
-<div style="text-align:center;border-bottom:2px solid #5C7A52;padding-bottom:16px;margin-bottom:20px;">
-<img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" style="width:220px;mix-blend-mode:multiply;">
+        // Get compressed signatures as data URIs
+        const sigCDataUri = 'data:image/jpeg;base64,' + sigC;
+        const sigPDataUri = 'data:image/jpeg;base64,' + sigP;
+        
+        // Build full document email with text + signature
+        const docStyle = 'font-size:13px;color:#1C1C1C;line-height:1.8;white-space:pre-wrap;font-family:Georgia,serif;';
+        const h3Style = 'font-size:14px;font-weight:700;color:#3D3228;margin:16px 0 6px;';
+        const sigBoxStyle = 'margin-top:20px;padding-top:16px;border-top:2px solid #5C7A52;';
+
+        // Convert CONTRATTO_TEXT and PRIVACY_TEXT to HTML paragraphs
+        function textToHtml(txt){
+          return txt.split('\n').map(l=>{
+            if(!l.trim()) return '<br>';
+            if(l.match(/^[0-9]+\)/)) return '<h4 style="'+h3Style+'">'+l+'</h4>';
+            return '<p style="margin:0 0 8px;font-size:13px;line-height:1.7;color:#1C1C1C;">'+l+'</p>';
+          }).join('');
+        }
+
+        const emailHtml = \`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:640px;margin:0 auto;background:#FAF6F0;padding:0;">
+
+<div style="background:#3D3228;padding:20px 28px;text-align:center;">
+<img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" style="width:200px;background:white;padding:8px;border-radius:4px;">
+<p style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin:8px 0 0;">Documenti del soggiorno</p>
 </div>
-<p style="font-size:15px;color:#1C1C1C;">Gentile <strong>${session.guestName}</strong>,</p>
-<p style="font-size:14px;color:#7A7060;">di seguito trova i documenti firmati il <strong>${dateStr2}</strong>.</p>
-<p style="font-size:12px;color:#7A7060;">${session.dates}</p>
-<div style="background:white;border:1px solid #DDD5C8;border-radius:8px;padding:16px;margin:16px 0;">
-<p style="font-size:11px;font-weight:700;text-transform:uppercase;color:#5C7A52;margin:0 0 8px;">Contratto di Locazione Turistica</p>
-<p style="font-size:11px;color:#7A7060;margin:0 0 10px;">Firmato il ${dateStr2}</p>
-<img src="cid:firma_contratto" style="max-width:240px;border:1px solid #DDD5C8;border-radius:4px;">
+
+<div style="padding:24px 28px 0;">
+<p style="font-size:15px;color:#1C1C1C;">Gentile <strong>\${session.guestName}</strong>,</p>
+<p style="font-size:14px;color:#7A7060;line-height:1.7;">di seguito trova i documenti da Lei firmati il <strong>\${dateStr2}</strong>.<br>\${session.dates}</p>
 </div>
-<div style="background:white;border:1px solid #DDD5C8;border-radius:8px;padding:16px;margin:16px 0;">
-<p style="font-size:11px;font-weight:700;text-transform:uppercase;color:#5C7A52;margin:0 0 8px;">Informativa Privacy (GDPR)</p>
-<p style="font-size:11px;color:#7A7060;margin:0 0 10px;">Firmato il ${dateStr2}</p>
-<img src="cid:firma_privacy" style="max-width:240px;border:1px solid #DDD5C8;border-radius:4px;">
+
+<!-- CONTRATTO -->
+<div style="margin:16px 28px;background:white;border:1px solid #DDD5C8;border-radius:10px;overflow:hidden;">
+  <div style="background:#5C7A52;padding:10px 18px;">
+    <p style="color:white;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0;">Contratto di Locazione Turistica</p>
+  </div>
+  <div style="padding:18px;">
+    \${textToHtml(CONTRATTO_TEXT)}
+    <div style="\${sigBoxStyle}">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;color:#7A7060;letter-spacing:.1em;margin:0 0 8px;">Firma dell'ospite — \${dateStr2}</p>
+      <img src="\${sigCDataUri}" style="max-width:220px;border:1px solid #DDD5C8;border-radius:6px;background:#F8F5F0;padding:4px;display:block;">
+    </div>
+  </div>
 </div>
-<p style="text-align:center;font-size:10px;color:#8A7060;text-transform:uppercase;letter-spacing:.1em;margin-top:20px;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT)</p>
-</body></html>`;
+
+<!-- PRIVACY -->
+<div style="margin:0 28px 24px;background:white;border:1px solid #DDD5C8;border-radius:10px;overflow:hidden;">
+  <div style="background:#5C7A52;padding:10px 18px;">
+    <p style="color:white;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0;">Informativa Privacy — GDPR 679/2016</p>
+  </div>
+  <div style="padding:18px;">
+    \${textToHtml(PRIVACY_TEXT)}
+    <div style="\${sigBoxStyle}">
+      <p style="font-size:10px;font-weight:700;text-transform:uppercase;color:#7A7060;letter-spacing:.1em;margin:0 0 8px;">Firma dell'ospite — \${dateStr2}</p>
+      <img src="\${sigPDataUri}" style="max-width:220px;border:1px solid #DDD5C8;border-radius:6px;background:#F8F5F0;padding:4px;display:block;">
+    </div>
+  </div>
+</div>
+
+<div style="padding:16px 28px;text-align:center;border-top:1px solid #DDD5C8;">
+<p style="font-size:10px;color:#8A7060;letter-spacing:.1em;text-transform:uppercase;margin:0;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT) · info@bnbcasamoresca.com</p>
+</div>
+
+</body></html>\`;
         
         const resp = await fetch(WORKER + '/sendemail', {
           method: 'POST',
