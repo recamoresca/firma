@@ -602,15 +602,17 @@ async function confirmSign(){
         // Build compact signature images (resize to reduce size)
         function compressSig(dataUrl){
           return new Promise((resolve) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 300; canvas.height = 80;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0,0,300,80);
             const img = new Image();
             img.onload = () => {
-              ctx.drawImage(img, 0, 0, 300, 80);
-              resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
+              const canvas = document.createElement('canvas');
+              // Keep original dimensions, just convert to JPEG
+              canvas.width = img.naturalWidth || img.width;
+              canvas.height = img.naturalHeight || img.height;
+              const ctx = canvas.getContext('2d');
+              ctx.fillStyle = 'white';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0);
+              resolve(canvas.toDataURL('image/jpeg', 0.9).split(',')[1]);
             };
             img.src = dataUrl;
           });
