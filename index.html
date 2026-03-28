@@ -596,6 +596,7 @@ async function confirmSign(){
     // Send email to guest if email available
     if(session.guestEmail){
       document.getElementById('ltxt').textContent = "Invio email all'ospite…";
+      console.log('Sending email to:', session.guestEmail);
       try{
         const dateStr = new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
         const emailBody = '<div style="font-family:Georgia,sans-serif;max-width:680px;margin:0 auto;background:#FAF6F0;padding:0;">'
@@ -639,8 +640,11 @@ async function confirmSign(){
           nome_ospite: session.guestName,
         });
       }catch(e){
-        console.error('Email error:',e);
+        console.error('Email error full:', JSON.stringify(e), e.text, e.status, e.message);
+        alert('Errore email: ' + (e.text || e.message || JSON.stringify(e)));
       }
+    } else {
+      alert('DEBUG: guestEmail vuoto - impossibile inviare');
     }
     
     hideLdr();
