@@ -617,15 +617,15 @@ async function confirmSign(){
         
         // Save signatures to KV and get public URLs
         const sigKey = 'sig_' + session.bookingId + '_' + Date.now();
-        await fetch(WORKER + '/save', {
+        await fetch(WORKER + '/savesig', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({key: sigKey + '_c', data: sigC})
+          body: JSON.stringify({key: sigKey + '_c', b64: sigC})
         });
-        await fetch(WORKER + '/save', {
+        await fetch(WORKER + '/savesig', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({key: sigKey + '_p', data: sigP})
+          body: JSON.stringify({key: sigKey + '_p', b64: sigP})
         });
         const sigCUrl = WORKER + '/sig?key=' + sigKey + '_c';
         const sigPUrl = WORKER + '/sig?key=' + sigKey + '_p';
