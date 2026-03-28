@@ -199,6 +199,7 @@ body{font-family:'Raleway',sans-serif;color:var(--ink);font-size:16px}
     <h2>Firma Documenti</h2>
     <p>In attesa dell'operatore…<br>La schermata si aggiornerà automaticamente.</p>
     <div class="wait-pulse"></div>
+    <button onclick="poll()" style="margin-top:28px;background:none;border:1px solid var(--border);border-radius:20px;padding:10px 24px;font-family:'Raleway',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:.06em;">↻ Aggiorna</button>
   </div>
 </div>
 
@@ -326,10 +327,13 @@ function hideLdr(){document.getElementById('ldr').classList.remove('on')}
 // ── POLLING ─────────────────────────────────────────
 async function poll(){
   try{
-    const r = await fetch(WORKER+'/load?key='+FIRMA_KEY);
-    const data = await r.json();
+    const r = await fetch(WORKER+'/load?key='+FIRMA_KEY+'&t='+Date.now());
+    const raw = await r.text();
+    let data;
+    try{ data = JSON.parse(raw); }catch(e){ return; }
     if(data && data.status === 'ready' && data.guestName){
       clearInterval(pollTimer);
+      pollTimer = null;
       session = data;
       startSigning();
     }
@@ -339,8 +343,9 @@ async function poll(){
 }
 
 function startPolling(){
+  if(pollTimer){ clearInterval(pollTimer); }
   pollTimer = setInterval(poll, POLL_INTERVAL);
-  poll(); // immediate first check
+  setTimeout(poll, 500); // first check after short delay
 }
 
 // ── SIGNING FLOW ────────────────────────────────────
