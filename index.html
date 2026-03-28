@@ -196,10 +196,10 @@ body{font-family:'Raleway',sans-serif;color:var(--ink);font-size:16px}
     <p>Porto Badino · Riviera di Ulisse</p>
   </div>
   <div class="wait-msg">
-    <h2>Firma Documenti</h2>
-    <p>In attesa dell'operatore…<br>La schermata si aggiornerà automaticamente.</p>
+    <h2>Firma Documenti<br><span style="font-size:22px;font-weight:300;color:var(--muted)">Document Signing</span></h2>
+    <p>In attesa dell'operatore…<br><em style="color:var(--muted);font-size:13px">Waiting for the operator…</em></p>
     <div class="wait-pulse"></div>
-    <button onclick="poll()" style="margin-top:28px;background:none;border:1px solid var(--border);border-radius:20px;padding:10px 24px;font-family:'Raleway',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:.06em;">↻ Aggiorna</button>
+    <p style="margin-top:28px;font-size:11px;color:var(--border);letter-spacing:.06em;">↓ Scorri verso il basso per aggiornare · Pull down to refresh</p>
   </div>
 </div>
 
@@ -345,7 +345,18 @@ async function poll(){
 function startPolling(){
   if(pollTimer){ clearInterval(pollTimer); }
   pollTimer = setInterval(poll, POLL_INTERVAL);
-  setTimeout(poll, 500); // first check after short delay
+  setTimeout(poll, 500);
+  initPullToRefresh();
+}
+
+function initPullToRefresh(){
+  let startY = 0;
+  const el = document.getElementById('screen-wait');
+  el.addEventListener('touchstart', e=>{ startY = e.touches[0].clientY; }, {passive:true});
+  el.addEventListener('touchend', e=>{
+    const dy = e.changedTouches[0].clientY - startY;
+    if(dy > 70) poll();
+  }, {passive:true});
 }
 
 // ── SIGNING FLOW ────────────────────────────────────
@@ -623,19 +634,16 @@ async function confirmSign(){
         
         // Save signatures to KV and get public URLs
         const sigKey = 'sig_' + session.bookingId + '_' + Date.now();
-        const r1 = await fetch(WORKER + '/savesig', {
+        await fetch(WORKER + '/savesig', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({key: sigKey + '_c', b64: sigC})
         });
-        const r2 = await fetch(WORKER + '/savesig', {
+        await fetch(WORKER + '/savesig', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({key: sigKey + '_p', b64: sigP})
         });
-        const t1 = await r1.text();
-        const t2 = await r2.text();
-        alert('Salvataggio firme: ' + r1.status + ' ' + t1.slice(0,80) + ' / ' + r2.status + ' ' + t2.slice(0,80) + '\nKey: ' + sigKey);
         const sigCUrl = WORKER + '/sig?key=' + sigKey + '_c';
         const sigPUrl = WORKER + '/sig?key=' + sigKey + '_p';
         const sigCDataUri = sigCUrl;
@@ -688,7 +696,7 @@ async function confirmSign(){
           + '<p style="font-size:10px;color:#8A7060;letter-spacing:.1em;text-transform:uppercase;margin:0;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT)</p>'
           + '</div></body></html>';
         
-        const resp = await fetch(WORKER + '/sendemail', {
+        await fetch(WORKER + '/sendemail', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -701,8 +709,7 @@ async function confirmSign(){
             ]
           })
         });
-        const respText = await resp.text();
-        alert('Email risposta: ' + resp.status + ' — ' + respText.slice(0,200));
+
       }catch(e){
         alert('Email errore catch: ' + e.message);
         console.error('Email error:', e);
