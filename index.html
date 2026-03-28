@@ -596,57 +596,62 @@ async function confirmSign(){
     // Send email to guest if email available
     if(session.guestEmail){
       document.getElementById('ltxt').textContent = "Invio email all'ospite…";
-      console.log('Sending email to:', session.guestEmail);
       try{
-        const dateStr = new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
-        const emailBody = '<div style="font-family:Georgia,sans-serif;max-width:680px;margin:0 auto;background:#FAF6F0;padding:0;">'
-          +'<div style="background:#3D3228;padding:24px 32px;text-align:center;">'
-          +'<img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" style="width:220px;height:auto;background:white;padding:8px;border-radius:4px;">'
-          +'<div style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-top:8px;">Documenti del soggiorno</div>'
-          +'</div>'
-          +'<div style="padding:28px 32px 0;">'
-          +'<p style="font-size:15px;color:#1C1C1C;line-height:1.8;">Gentile <strong>'+session.guestName+'</strong>,</p>'
-          +'<p style="font-size:14px;color:#7A7060;line-height:1.8;">di seguito trova i documenti da Lei firmati il <strong>'+dateStr+'</strong>.</p>'
-          +'</div>'
-          // CONTRATTO
-          +'<div style="margin:16px 32px;">'
-          +'<div style="background:#5C7A52;color:white;padding:10px 18px;border-radius:8px 8px 0 0;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Contratto di Soggiorno</div>'
-          +'<div style="background:white;border:1px solid #DDD5C8;border-top:none;border-radius:0 0 8px 8px;padding:20px 18px;">'
-          +'<p style="font-size:13px;color:#3D3228;font-weight:600;margin:0 0 4px;">'+session.guestName+'</p>'
-          +'<p style="font-size:12px;color:#7A7060;margin:0 0 14px;">'+session.dates+'</p>'
-          +'<pre style="font-size:11px;color:#1C1C1C;line-height:1.8;white-space:pre-wrap;font-family:Georgia,serif;">'+CONTRATTO_TEXT+'</pre>'
-          +'<div style="margin-top:16px;border-top:1px solid #DDD5C8;padding-top:14px;">'
-          +'<p style="font-size:10px;color:#7A7060;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin:0 0 8px;">Firma</p>'
-          +'<img src="'+session.firmaContratto+'" style="max-width:240px;height:auto;border:1px solid #DDD5C8;border-radius:6px;padding:4px;">'
-          +'<p style="font-size:11px;color:#7A7060;margin:6px 0 0;">Firmato il '+dateStr+'</p>'
-          +'</div></div></div>'
-          // PRIVACY
-          +'<div style="margin:0 32px 24px;">'
-          +'<div style="background:#5C7A52;color:white;padding:10px 18px;border-radius:8px 8px 0 0;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Informativa Privacy (GDPR)</div>'
-          +'<div style="background:white;border:1px solid #DDD5C8;border-top:none;border-radius:0 0 8px 8px;padding:20px 18px;">'
-          +'<pre style="font-size:11px;color:#1C1C1C;line-height:1.8;white-space:pre-wrap;font-family:Georgia,serif;">'+PRIVACY_TEXT+'</pre>'
-          +'<div style="margin-top:16px;border-top:1px solid #DDD5C8;padding-top:14px;">'
-          +'<p style="font-size:10px;color:#7A7060;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin:0 0 8px;">Firma</p>'
-          +'<img src="'+session.firmaPrivacy+'" style="max-width:240px;height:auto;border:1px solid #DDD5C8;border-radius:6px;padding:4px;">'
-          +'<p style="font-size:11px;color:#7A7060;margin:6px 0 0;">Firmato il '+dateStr+'</p>'
-          +'</div></div></div>'
-          +'<div style="padding:20px 32px;text-align:center;border-top:1px solid #DDD5C8;">'
-          +'<p style="font-size:10px;color:#7A7060;letter-spacing:0.1em;text-transform:uppercase;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT)</p>'
-          +'</div></div>';
+        const dateStr2 = new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
         
-        await emailjs.send('service_tsjwj0q','template_92al43u',{
-          ospite_email: session.guestEmail,
-          messaggio_ospite: emailBody,
-          nome_ospite: session.guestName,
+        // Build compact signature images (resize to reduce size)
+        function compressSig(dataUrl){
+          const canvas = document.createElement('canvas');
+          canvas.width = 300; canvas.height = 80;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = 'white';
+          ctx.fillRect(0,0,300,80);
+          const img = new Image();
+          img.src = dataUrl;
+          ctx.drawImage(img, 0, 0, 300, 80);
+          return canvas.toDataURL('image/jpeg', 0.6).split(',')[1];
+        }
+        
+        const sigC = compressSig(session.firmaContratto);
+        const sigP = compressSig(session.firmaPrivacy);
+        
+        const emailHtml = `<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:600px;margin:0 auto;background:#FAF6F0;padding:24px;">
+<div style="text-align:center;border-bottom:2px solid #5C7A52;padding-bottom:16px;margin-bottom:20px;">
+<img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" style="width:220px;mix-blend-mode:multiply;">
+</div>
+<p style="font-size:15px;color:#1C1C1C;">Gentile <strong>${session.guestName}</strong>,</p>
+<p style="font-size:14px;color:#7A7060;">di seguito trova i documenti firmati il <strong>${dateStr2}</strong>.</p>
+<p style="font-size:12px;color:#7A7060;">${session.dates}</p>
+<div style="background:white;border:1px solid #DDD5C8;border-radius:8px;padding:16px;margin:16px 0;">
+<p style="font-size:11px;font-weight:700;text-transform:uppercase;color:#5C7A52;margin:0 0 8px;">Contratto di Locazione Turistica</p>
+<p style="font-size:11px;color:#7A7060;margin:0 0 10px;">Firmato il ${dateStr2}</p>
+<img src="cid:firma_contratto" style="max-width:240px;border:1px solid #DDD5C8;border-radius:4px;">
+</div>
+<div style="background:white;border:1px solid #DDD5C8;border-radius:8px;padding:16px;margin:16px 0;">
+<p style="font-size:11px;font-weight:700;text-transform:uppercase;color:#5C7A52;margin:0 0 8px;">Informativa Privacy (GDPR)</p>
+<p style="font-size:11px;color:#7A7060;margin:0 0 10px;">Firmato il ${dateStr2}</p>
+<img src="cid:firma_privacy" style="max-width:240px;border:1px solid #DDD5C8;border-radius:4px;">
+</div>
+<p style="text-align:center;font-size:10px;color:#8A7060;text-transform:uppercase;letter-spacing:.1em;margin-top:20px;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT)</p>
+</body></html>`;
+        
+        await fetch(WORKER + '/sendemail', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            to: session.guestEmail,
+            subject: 'Relais Casa Moresca — Documenti del tuo soggiorno',
+            html: emailHtml,
+            attachments: [
+              { content: sigC, filename: 'firma_contratto.jpg', type: 'image/jpeg', disposition: 'inline', content_id: 'firma_contratto' },
+              { content: sigP, filename: 'firma_privacy.jpg', type: 'image/jpeg', disposition: 'inline', content_id: 'firma_privacy' },
+            ]
+          })
         });
       }catch(e){
-        console.error('Email error full:', JSON.stringify(e), e.text, e.status, e.message);
-        alert('Errore email: ' + (e.text || e.message || JSON.stringify(e)));
+        console.error('Email error:', e);
       }
-    } else {
-      alert('DEBUG: guestEmail vuoto - impossibile inviare');
     }
-    
     hideLdr();
     showScr('screen-done');
     document.getElementById('done-msg').innerHTML = 
