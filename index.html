@@ -635,7 +635,7 @@ async function confirmSign(){
 <p style="text-align:center;font-size:10px;color:#8A7060;text-transform:uppercase;letter-spacing:.1em;margin-top:20px;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT)</p>
 </body></html>`;
         
-        await fetch(WORKER + '/sendemail', {
+        const resp = await fetch(WORKER + '/sendemail', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -648,7 +648,10 @@ async function confirmSign(){
             ]
           })
         });
+        const respText = await resp.text();
+        alert('Email risposta: ' + resp.status + ' — ' + respText.slice(0,200));
       }catch(e){
+        alert('Email errore catch: ' + e.message);
         console.error('Email error:', e);
       }
     }
