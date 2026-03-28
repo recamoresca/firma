@@ -633,51 +633,38 @@ async function confirmSign(){
           }).join('');
         }
 
-        const emailHtml = \`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:640px;margin:0 auto;background:#FAF6F0;padding:0;">
-
-<div style="background:#3D3228;padding:20px 28px;text-align:center;">
-<img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" style="width:200px;background:white;padding:8px;border-radius:4px;">
-<p style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin:8px 0 0;">Documenti del soggiorno</p>
-</div>
-
-<div style="padding:24px 28px 0;">
-<p style="font-size:15px;color:#1C1C1C;">Gentile <strong>\${session.guestName}</strong>,</p>
-<p style="font-size:14px;color:#7A7060;line-height:1.7;">di seguito trova i documenti da Lei firmati il <strong>\${dateStr2}</strong>.<br>\${session.dates}</p>
-</div>
-
-<!-- CONTRATTO -->
-<div style="margin:16px 28px;background:white;border:1px solid #DDD5C8;border-radius:10px;overflow:hidden;">
-  <div style="background:#5C7A52;padding:10px 18px;">
-    <p style="color:white;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0;">Contratto di Locazione Turistica</p>
-  </div>
-  <div style="padding:18px;">
-    \${textToHtml(CONTRATTO_TEXT)}
-    <div style="\${sigBoxStyle}">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;color:#7A7060;letter-spacing:.1em;margin:0 0 8px;">Firma dell'ospite — \${dateStr2}</p>
-      <img src="\${sigCDataUri}" style="max-width:220px;border:1px solid #DDD5C8;border-radius:6px;background:#F8F5F0;padding:4px;display:block;">
-    </div>
-  </div>
-</div>
-
-<!-- PRIVACY -->
-<div style="margin:0 28px 24px;background:white;border:1px solid #DDD5C8;border-radius:10px;overflow:hidden;">
-  <div style="background:#5C7A52;padding:10px 18px;">
-    <p style="color:white;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0;">Informativa Privacy — GDPR 679/2016</p>
-  </div>
-  <div style="padding:18px;">
-    \${textToHtml(PRIVACY_TEXT)}
-    <div style="\${sigBoxStyle}">
-      <p style="font-size:10px;font-weight:700;text-transform:uppercase;color:#7A7060;letter-spacing:.1em;margin:0 0 8px;">Firma dell'ospite — \${dateStr2}</p>
-      <img src="\${sigPDataUri}" style="max-width:220px;border:1px solid #DDD5C8;border-radius:6px;background:#F8F5F0;padding:4px;display:block;">
-    </div>
-  </div>
-</div>
-
-<div style="padding:16px 28px;text-align:center;border-top:1px solid #DDD5C8;">
-<p style="font-size:10px;color:#8A7060;letter-spacing:.1em;text-transform:uppercase;margin:0;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT) · info@bnbcasamoresca.com</p>
-</div>
-
-</body></html>\`;
+        const emailHtml = '<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:640px;margin:0 auto;background:#FAF6F0;padding:0;">'
+          + '<div style="background:#3D3228;padding:20px 28px;text-align:center;">'
+          + '<img src="https://static.wixstatic.com/media/cb1b98_b84204f1641846b8938a218cd263e9e2~mv2.png/v1/fill/w_341,h_82,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/banner%20grande%20400dpi.png" style="width:200px;background:white;padding:8px;border-radius:4px;">'
+          + '<p style="color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin:8px 0 0;">Documenti del soggiorno</p>'
+          + '</div>'
+          + '<div style="padding:24px 28px 0;">'
+          + '<p style="font-size:15px;color:#1C1C1C;">Gentile <strong>' + session.guestName + '</strong>,</p>'
+          + '<p style="font-size:14px;color:#7A7060;line-height:1.7;">di seguito trova i documenti da Lei firmati il <strong>' + dateStr2 + '</strong>.<br>' + session.dates + '</p>'
+          + '</div>'
+          + '<div style="margin:16px 28px;background:white;border:1px solid #DDD5C8;border-radius:10px;overflow:hidden;">'
+          + '<div style="background:#5C7A52;padding:10px 18px;">'
+          + '<p style="color:white;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0;">Contratto di Locazione Turistica</p>'
+          + '</div>'
+          + '<div style="padding:18px;">'
+          + textToHtml(CONTRATTO_TEXT)
+          + '<div style="margin-top:20px;padding-top:16px;border-top:2px solid #5C7A52;">'
+          + '<p style="font-size:10px;font-weight:700;text-transform:uppercase;color:#7A7060;letter-spacing:.1em;margin:0 0 8px;">Firma — ' + dateStr2 + '</p>'
+          + '<img src="' + sigCDataUri + '" style="max-width:220px;border:1px solid #DDD5C8;border-radius:6px;padding:4px;display:block;">'
+          + '</div></div></div>'
+          + '<div style="margin:0 28px 24px;background:white;border:1px solid #DDD5C8;border-radius:10px;overflow:hidden;">'
+          + '<div style="background:#5C7A52;padding:10px 18px;">'
+          + '<p style="color:white;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0;">Informativa Privacy — GDPR 679/2016</p>'
+          + '</div>'
+          + '<div style="padding:18px;">'
+          + textToHtml(PRIVACY_TEXT)
+          + '<div style="margin-top:20px;padding-top:16px;border-top:2px solid #5C7A52;">'
+          + '<p style="font-size:10px;font-weight:700;text-transform:uppercase;color:#7A7060;letter-spacing:.1em;margin:0 0 8px;">Firma — ' + dateStr2 + '</p>'
+          + '<img src="' + sigPDataUri + '" style="max-width:220px;border:1px solid #DDD5C8;border-radius:6px;padding:4px;display:block;">'
+          + '</div></div></div>'
+          + '<div style="padding:16px 28px;text-align:center;border-top:1px solid #DDD5C8;">'
+          + '<p style="font-size:10px;color:#8A7060;letter-spacing:.1em;text-transform:uppercase;margin:0;">Relais Casa Moresca · Via Didone 9 · Porto Badino (LT)</p>'
+          + '</div></body></html>';
         
         const resp = await fetch(WORKER + '/sendemail', {
           method: 'POST',
