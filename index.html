@@ -615,9 +615,22 @@ async function confirmSign(){
         const sigC = compressSig(session.firmaContratto);
         const sigP = compressSig(session.firmaPrivacy);
         
-        // Get compressed signatures as data URIs
-        const sigCDataUri = 'data:image/jpeg;base64,' + sigC;
-        const sigPDataUri = 'data:image/jpeg;base64,' + sigP;
+        // Save signatures to KV and get public URLs
+        const sigKey = 'sig_' + session.bookingId + '_' + Date.now();
+        await fetch(WORKER + '/save', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({key: sigKey + '_c', data: sigC})
+        });
+        await fetch(WORKER + '/save', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({key: sigKey + '_p', data: sigP})
+        });
+        const sigCUrl = WORKER + '/sig?key=' + sigKey + '_c';
+        const sigPUrl = WORKER + '/sig?key=' + sigKey + '_p';
+        const sigCDataUri = sigCUrl;
+        const sigPDataUri = sigPUrl;
         
         // Build full document email with text + signature
         const docStyle = 'font-size:13px;color:#1C1C1C;line-height:1.8;white-space:pre-wrap;font-family:Georgia,serif;';
